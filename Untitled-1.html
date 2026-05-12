@@ -1,0 +1,1540 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LionCodingWeb | Coding lernen</title>
+
+  <style>
+    :root {
+      --bg: #050505;
+      --bg-2: #090909;
+      --panel: #0f0f0f;
+      --panel-2: #151515;
+      --card: #111111;
+      --text: #ffffff;
+      --muted: #b7b7b7;
+      --dim: #777777;
+      --line: #2a2a2a;
+      --line-soft: #1c1c1c;
+      --good: #ffffff;
+      --danger: #bdbdbd;
+      --radius: 22px;
+      --shadow: 0 0 45px rgba(255,255,255,0.07);
+      --max: 1240px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: Consolas, Monaco, "Courier New", monospace;
+      background:
+        radial-gradient(circle at top left, rgba(255,255,255,0.08), transparent 34%),
+        radial-gradient(circle at bottom right, rgba(255,255,255,0.04), transparent 34%),
+        var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px);
+      background-size: 42px 42px;
+      mask-image: linear-gradient(to bottom, black, transparent 82%);
+      z-index: -1;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    button, textarea, input { font: inherit; }
+
+    .container {
+      width: min(var(--max), 92%);
+      margin: 0 auto;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 14px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      color: var(--muted);
+      background: rgba(15,15,15,0.8);
+      font-size: 14px;
+    }
+
+    .pill::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--text);
+      box-shadow: 0 0 18px var(--text);
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      border-bottom: 1px solid var(--line);
+      background: rgba(5,5,5,0.9);
+      backdrop-filter: blur(16px);
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 82px;
+      gap: 24px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 13px;
+      font-weight: 900;
+      letter-spacing: -1px;
+      font-size: 25px;
+    }
+
+    .brand-mark {
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: var(--panel);
+      box-shadow: var(--shadow);
+    }
+
+    .brand span { color: var(--muted); }
+
+    nav {
+      display: flex;
+      align-items: center;
+      gap: 22px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    nav a {
+      transition: 0.2s ease;
+      white-space: nowrap;
+    }
+
+    nav a:hover { color: var(--text); }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .menu-btn {
+      display: none;
+      border: 1px solid var(--line);
+      color: var(--text);
+      background: var(--panel);
+      padding: 11px 14px;
+      border-radius: 12px;
+      cursor: pointer;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      border: 1px solid var(--text);
+      color: var(--text);
+      background: transparent;
+      padding: 14px 20px;
+      border-radius: 14px;
+      cursor: pointer;
+      transition: 0.23s ease;
+      min-height: 48px;
+    }
+
+    .btn:hover {
+      background: var(--text);
+      color: #000;
+      transform: translateY(-2px);
+    }
+
+    .btn.ghost {
+      border-color: var(--line);
+      color: var(--muted);
+      background: rgba(15,15,15,0.6);
+    }
+
+    .btn.ghost:hover {
+      border-color: var(--text);
+      color: #000;
+      background: var(--text);
+    }
+
+    .hero {
+      min-height: calc(100vh - 82px);
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 54px;
+      align-items: center;
+      padding: 78px 0 90px;
+    }
+
+    .hero h1 {
+      font-size: clamp(45px, 7.4vw, 92px);
+      line-height: 0.98;
+      letter-spacing: -5px;
+      margin: 24px 0;
+    }
+
+    .hero h1 span { color: var(--muted); }
+
+    .hero-text {
+      color: var(--muted);
+      font-size: 18px;
+      line-height: 1.85;
+      max-width: 720px;
+      margin-bottom: 32px;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin-bottom: 34px;
+    }
+
+    .hero-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      max-width: 680px;
+    }
+
+    .stat {
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: rgba(15,15,15,0.74);
+    }
+
+    .stat strong {
+      display: block;
+      font-size: 28px;
+      margin-bottom: 8px;
+    }
+
+    .stat small { color: var(--muted); line-height: 1.5; }
+
+    .app-window {
+      border: 1px solid var(--line);
+      background: var(--panel);
+      border-radius: 24px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .window-top {
+      min-height: 52px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 18px;
+      border-bottom: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .dots { display: flex; gap: 8px; }
+    .dot { width: 12px; height: 12px; background: var(--text); border-radius: 50%; opacity: 0.8; }
+
+    .window-body { padding: 24px; }
+
+    .dashboard-preview {
+      display: grid;
+      gap: 16px;
+    }
+
+    .preview-row {
+      display: grid;
+      grid-template-columns: 52px 1fr auto;
+      align-items: center;
+      gap: 16px;
+      padding: 16px;
+      border: 1px solid var(--line-soft);
+      background: #080808;
+      border-radius: 18px;
+    }
+
+    .preview-icon {
+      width: 52px;
+      height: 52px;
+      display: grid;
+      place-items: center;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+    }
+
+    .preview-row h3 { font-size: 16px; margin-bottom: 6px; }
+    .preview-row p { color: var(--muted); font-size: 13px; line-height: 1.5; }
+    .preview-row strong { color: var(--muted); font-size: 13px; }
+
+    .progressbar {
+      width: 100%;
+      height: 10px;
+      background: #000;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      overflow: hidden;
+      margin-top: 9px;
+    }
+
+    .progressbar span {
+      display: block;
+      height: 100%;
+      width: var(--w);
+      background: var(--text);
+    }
+
+    section {
+      padding: 96px 0;
+      border-top: 1px solid var(--line-soft);
+    }
+
+    .section-head {
+      display: grid;
+      grid-template-columns: 0.9fr 1.1fr;
+      gap: 32px;
+      align-items: end;
+      margin-bottom: 44px;
+    }
+
+    .section-head h2 {
+      font-size: clamp(34px, 5vw, 58px);
+      line-height: 1.02;
+      letter-spacing: -3px;
+    }
+
+    .section-head p {
+      color: var(--muted);
+      line-height: 1.8;
+      font-size: 16px;
+    }
+
+    .course-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 18px;
+    }
+
+    .course-card {
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      padding: 22px;
+      background: linear-gradient(180deg, #141414, #090909);
+      min-height: 280px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: 0.25s ease;
+    }
+
+    .course-card:hover {
+      transform: translateY(-8px);
+      border-color: var(--text);
+      box-shadow: var(--shadow);
+    }
+
+    .course-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: var(--muted);
+      font-size: 13px;
+      margin-bottom: 24px;
+    }
+
+    .course-card h3 {
+      font-size: 24px;
+      margin-bottom: 14px;
+      letter-spacing: -1px;
+    }
+
+    .course-card p {
+      color: var(--muted);
+      line-height: 1.7;
+      font-size: 14px;
+    }
+
+    .tag-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 18px;
+    }
+
+    .tag {
+      border: 1px solid var(--line);
+      color: var(--muted);
+      padding: 7px 9px;
+      border-radius: 999px;
+      font-size: 12px;
+    }
+
+    .learn-layout {
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      gap: 22px;
+      align-items: start;
+    }
+
+    .sidebar {
+      position: sticky;
+      top: 104px;
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      background: rgba(15,15,15,0.82);
+      padding: 18px;
+    }
+
+    .sidebar h3 {
+      margin-bottom: 14px;
+      font-size: 18px;
+    }
+
+    .lesson-tab {
+      width: 100%;
+      text-align: left;
+      border: 1px solid transparent;
+      color: var(--muted);
+      background: transparent;
+      padding: 14px;
+      border-radius: 14px;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      transition: 0.2s ease;
+    }
+
+    .lesson-tab:hover,
+    .lesson-tab.active {
+      color: var(--text);
+      border-color: var(--line);
+      background: #080808;
+    }
+
+    .lesson-panel {
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      background: var(--panel);
+      overflow: hidden;
+    }
+
+    .lesson-hero {
+      padding: 30px;
+      border-bottom: 1px solid var(--line);
+      background:
+        linear-gradient(135deg, rgba(255,255,255,0.08), transparent),
+        #0b0b0b;
+    }
+
+    .lesson-hero small { color: var(--muted); }
+    .lesson-hero h3 { font-size: 34px; margin: 12px 0; letter-spacing: -2px; }
+    .lesson-hero p { color: var(--muted); line-height: 1.75; }
+
+    .lesson-content {
+      padding: 30px;
+      display: grid;
+      gap: 22px;
+    }
+
+    .info-box {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: #090909;
+      padding: 20px;
+    }
+
+    .info-box h4 { margin-bottom: 12px; }
+    .info-box p, .info-box li { color: var(--muted); line-height: 1.7; }
+    .info-box ul { padding-left: 22px; display: grid; gap: 8px; }
+
+    pre {
+      white-space: pre-wrap;
+      word-break: break-word;
+      background: #050505;
+      border: 1px solid var(--line);
+      color: #e8e8e8;
+      border-radius: 18px;
+      padding: 20px;
+      line-height: 1.7;
+      overflow-x: auto;
+    }
+
+    .challenge-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .editor-shell {
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      overflow: hidden;
+      background: var(--panel);
+    }
+
+    .editor-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 16px;
+      border-bottom: 1px solid var(--line);
+      flex-wrap: wrap;
+    }
+
+    .toolbar-group {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 430px;
+      display: block;
+      resize: vertical;
+      background: #050505;
+      color: var(--text);
+      border: 0;
+      outline: none;
+      padding: 22px;
+      line-height: 1.65;
+    }
+
+    iframe {
+      width: 100%;
+      min-height: 430px;
+      background: white;
+      border: 0;
+      display: block;
+    }
+
+    .editor-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .panel-title {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--line);
+      color: var(--muted);
+      background: #080808;
+      font-size: 13px;
+    }
+
+    .tasks {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+      margin-top: 22px;
+    }
+
+    .task {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 20px;
+      background: var(--card);
+    }
+
+    .task h4 { margin-bottom: 10px; }
+    .task p { color: var(--muted); line-height: 1.7; font-size: 14px; }
+
+    .game-area {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 22px;
+      align-items: stretch;
+    }
+
+    .mission-card {
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      background: var(--panel);
+      padding: 26px;
+    }
+
+    .mission-card h3 {
+      font-size: 28px;
+      margin-bottom: 14px;
+      letter-spacing: -1px;
+    }
+
+    .mission-card p {
+      color: var(--muted);
+      line-height: 1.75;
+      margin-bottom: 18px;
+    }
+
+    .checklist {
+      display: grid;
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .check-item {
+      border: 1px solid var(--line);
+      padding: 14px;
+      border-radius: 14px;
+      color: var(--muted);
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .check-item.done {
+      color: var(--text);
+      border-color: var(--text);
+    }
+
+    .quiz-card {
+      max-width: 900px;
+      margin: 0 auto;
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      background: var(--panel);
+      padding: 30px;
+    }
+
+    .quiz-card h3 { font-size: 30px; margin-bottom: 14px; }
+    .quiz-card p { color: var(--muted); line-height: 1.7; }
+
+    .quiz-options {
+      display: grid;
+      gap: 13px;
+      margin: 24px 0;
+    }
+
+    .quiz-options button {
+      text-align: left;
+      border: 1px solid var(--line);
+      background: #070707;
+      color: var(--text);
+      padding: 16px;
+      border-radius: 16px;
+      cursor: pointer;
+      transition: 0.2s ease;
+    }
+
+    .quiz-options button:hover { border-color: var(--text); transform: translateX(5px); }
+
+    .result-box {
+      min-height: 26px;
+      color: var(--muted);
+      line-height: 1.7;
+      margin-top: 12px;
+    }
+
+    .profile-grid {
+      display: grid;
+      grid-template-columns: 0.8fr 1.2fr;
+      gap: 22px;
+    }
+
+    .profile-card,
+    .achievement-card {
+      border: 1px solid var(--line);
+      background: var(--panel);
+      border-radius: 24px;
+      padding: 28px;
+    }
+
+    .avatar {
+      width: 94px;
+      height: 94px;
+      display: grid;
+      place-items: center;
+      border: 1px solid var(--line);
+      border-radius: 26px;
+      font-size: 42px;
+      margin-bottom: 18px;
+      box-shadow: var(--shadow);
+    }
+
+    .profile-card h3 { font-size: 28px; margin-bottom: 10px; }
+    .profile-card p { color: var(--muted); line-height: 1.7; margin-bottom: 18px; }
+
+    .xp-line {
+      display: flex;
+      justify-content: space-between;
+      color: var(--muted);
+      font-size: 13px;
+      margin-bottom: 8px;
+    }
+
+    .badges {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+
+    .badge-card {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 18px;
+      background: #090909;
+    }
+
+    .badge-card strong { display: block; margin-bottom: 8px; }
+    .badge-card small { color: var(--muted); line-height: 1.5; }
+
+    .roadmap {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 16px;
+    }
+
+    .road-step {
+      border: 1px solid var(--line);
+      background: var(--panel);
+      border-radius: 22px;
+      padding: 22px;
+      min-height: 230px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .road-step::after {
+      content: "";
+      position: absolute;
+      width: 120px;
+      height: 120px;
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 50%;
+      right: -45px;
+      bottom: -45px;
+    }
+
+    .road-step strong { color: var(--muted); display: block; margin-bottom: 20px; }
+    .road-step h3 { margin-bottom: 12px; }
+    .road-step p { color: var(--muted); line-height: 1.65; font-size: 14px; }
+
+    .faq {
+      display: grid;
+      gap: 14px;
+      max-width: 950px;
+      margin: 0 auto;
+    }
+
+    details {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: var(--panel);
+      padding: 18px 20px;
+    }
+
+    summary {
+      cursor: pointer;
+      font-weight: 800;
+    }
+
+    details p {
+      color: var(--muted);
+      line-height: 1.75;
+      margin-top: 14px;
+    }
+
+    footer {
+      border-top: 1px solid var(--line);
+      padding: 40px 0;
+      color: var(--muted);
+      text-align: center;
+      background: #030303;
+    }
+
+    .toast {
+      position: fixed;
+      right: 20px;
+      bottom: 20px;
+      border: 1px solid var(--line);
+      background: var(--panel);
+      color: var(--text);
+      padding: 16px 18px;
+      border-radius: 16px;
+      box-shadow: var(--shadow);
+      transform: translateY(140px);
+      opacity: 0;
+      transition: 0.25s ease;
+      z-index: 2000;
+      max-width: 340px;
+      line-height: 1.5;
+    }
+
+    .toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    .hidden { display: none; }
+
+    @media (max-width: 1100px) {
+      .course-grid { grid-template-columns: repeat(2, 1fr); }
+      .roadmap { grid-template-columns: repeat(2, 1fr); }
+      .learn-layout { grid-template-columns: 1fr; }
+      .sidebar { position: static; }
+      .hero { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 820px) {
+      nav {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 82px;
+        display: none;
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 22px 6%;
+        background: #050505;
+        border-bottom: 1px solid var(--line);
+      }
+
+      nav.active { display: flex; }
+      .menu-btn { display: inline-flex; }
+      .hide-mobile { display: none; }
+      .section-head { grid-template-columns: 1fr; }
+      .hero-stats { grid-template-columns: 1fr; }
+      .editor-grid, .challenge-grid, .game-area, .profile-grid { grid-template-columns: 1fr; }
+      .tasks, .badges { grid-template-columns: 1fr; }
+      .course-grid, .roadmap { grid-template-columns: 1fr; }
+      .hero h1 { letter-spacing: -2px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container topbar">
+      <a href="#home" class="brand" aria-label="LionCodingWeb Home">
+        <span class="brand-mark">🦁</span>
+        Lion<span>CodingWeb</span>
+      </a>
+
+      <nav id="nav">
+        <a href="#kurse">Kurse</a>
+        <a href="#lernen">Lernen</a>
+        <a href="#editor">Editor</a>
+        <a href="#mission">Mission</a>
+        <a href="#quiz">Quiz</a>
+        <a href="#profil">Profil</a>
+        <a href="#roadmap">Roadmap</a>
+      </nav>
+
+      <div class="header-actions">
+        <button class="btn ghost hide-mobile" id="saveBtn">Fortschritt speichern</button>
+        <button class="menu-btn" id="menuBtn">Menü</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="container hero" id="home">
+      <div>
+        <div class="pill">Interaktive Coding-Plattform • HTML • CSS • JavaScript</div>
+        <h1>Lerne Coding. <span>Baue echte Webseiten.</span></h1>
+        <p class="hero-text">
+          LionCodingWeb ist deine eigene kleine Lernplattform: Kurse, Lektionen, Live-Editor,
+          Quiz, Missionen und Fortschritt. Schwarz-Weiß, extrem clean, direkt veröffentlichbar.
+        </p>
+        <div class="hero-actions">
+          <a href="#kurse" class="btn">Kurse ansehen</a>
+          <a href="#editor" class="btn ghost">Direkt coden</a>
+        </div>
+
+        <div class="hero-stats">
+          <div class="stat"><strong id="statLessons">12</strong><small>Lernmodule vorbereitet</small></div>
+          <div class="stat"><strong id="statXP">0 XP</strong><small>Dein Fortschritt lokal gespeichert</small></div>
+          <div class="stat"><strong>1 Datei</strong><small>index.html reicht zum Starten</small></div>
+        </div>
+      </div>
+
+      <div class="app-window">
+        <div class="window-top">
+          <div class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+          <span>lioncodingweb.app/dashboard</span>
+        </div>
+        <div class="window-body dashboard-preview">
+          <div class="preview-row">
+            <div class="preview-icon">HTML</div>
+            <div>
+              <h3>HTML Startkurs</h3>
+              <p>Struktur, Tags, Links, Bilder, Listen.</p>
+              <div class="progressbar"><span style="--w: 72%"></span></div>
+            </div>
+            <strong>72%</strong>
+          </div>
+          <div class="preview-row">
+            <div class="preview-icon">CSS</div>
+            <div>
+              <h3>Dark Design</h3>
+              <p>Layout, Cards, Responsive, Animation.</p>
+              <div class="progressbar"><span style="--w: 48%"></span></div>
+            </div>
+            <strong>48%</strong>
+          </div>
+          <div class="preview-row">
+            <div class="preview-icon">JS</div>
+            <div>
+              <h3>Interaktion</h3>
+              <p>Klicks, Quiz, Editor, lokale Daten.</p>
+              <div class="progressbar"><span style="--w: 31%"></span></div>
+            </div>
+            <strong>31%</strong>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="kurse">
+      <div class="container">
+        <div class="section-head">
+          <h2>Kurse wie eine echte Lernplattform.</h2>
+          <p>
+            Nicht nur Startseite und fertig. Hier sind Kurskarten, Lernziele und klare Pfade.
+            Der Look bleibt schwarz-weiß, aber die Funktionalität geht Richtung Academy.
+          </p>
+        </div>
+
+        <div class="course-grid">
+          <article class="course-card">
+            <div>
+              <div class="course-meta"><span>LEVEL 01</span><span>Beginner</span></div>
+              <h3>HTML Fundament</h3>
+              <p>Baue das Grundgerüst: Überschriften, Texte, Links, Bilder, Listen und Sections.</p>
+              <div class="tag-row"><span class="tag">Tags</span><span class="tag">Links</span><span class="tag">Semantik</span></div>
+            </div>
+            <a href="#lernen" class="btn ghost">Starten</a>
+          </article>
+
+          <article class="course-card">
+            <div>
+              <div class="course-meta"><span>LEVEL 02</span><span>Design</span></div>
+              <h3>CSS Mastery</h3>
+              <p>Lerne Abstände, Farben, Grid, Flexbox, Hover-Effekte und responsive Layouts.</p>
+              <div class="tag-row"><span class="tag">Flexbox</span><span class="tag">Grid</span><span class="tag">Dark UI</span></div>
+            </div>
+            <a href="#editor" class="btn ghost">Üben</a>
+          </article>
+
+          <article class="course-card">
+            <div>
+              <div class="course-meta"><span>LEVEL 03</span><span>Logic</span></div>
+              <h3>JavaScript Klicks</h3>
+              <p>Buttons, Menüs, Quiz, Editor und kleine Apps mit echter Interaktion.</p>
+              <div class="tag-row"><span class="tag">Events</span><span class="tag">DOM</span><span class="tag">Storage</span></div>
+            </div>
+            <a href="#quiz" class="btn ghost">Quiz</a>
+          </article>
+
+          <article class="course-card">
+            <div>
+              <div class="course-meta"><span>LEVEL 04</span><span>Deploy</span></div>
+              <h3>Website veröffentlichen</h3>
+              <p>VS Code, GitHub, GitHub Pages und saubere Datei-Struktur für deinen Launch.</p>
+              <div class="tag-row"><span class="tag">VS Code</span><span class="tag">GitHub</span><span class="tag">Pages</span></div>
+            </div>
+            <a href="#roadmap" class="btn ghost">Roadmap</a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="lernen">
+      <div class="container">
+        <div class="section-head">
+          <h2>Interaktive Lektionen.</h2>
+          <p>
+            Klick links auf eine Lektion. Der Inhalt wechselt live. Genau das brauchst du,
+            damit die Website nicht nur aussieht wie Lernplattform, sondern sich auch so anfühlt.
+          </p>
+        </div>
+
+        <div class="learn-layout">
+          <aside class="sidebar">
+            <h3>Lernpfad</h3>
+            <button class="lesson-tab active" data-lesson="html"><span>01 HTML Basics</span><span>›</span></button>
+            <button class="lesson-tab" data-lesson="css"><span>02 CSS Design</span><span>›</span></button>
+            <button class="lesson-tab" data-lesson="js"><span>03 JavaScript</span><span>›</span></button>
+            <button class="lesson-tab" data-lesson="deploy"><span>04 Veröffentlichen</span><span>›</span></button>
+          </aside>
+
+          <div class="lesson-panel">
+            <div class="lesson-hero">
+              <small id="lessonSmall">LEKTION 01</small>
+              <h3 id="lessonTitle">HTML Basics verstehen</h3>
+              <p id="lessonIntro">HTML ist das Grundgerüst jeder Website. Erst kommt Struktur, dann Design, dann Logik.</p>
+            </div>
+            <div class="lesson-content">
+              <div class="info-box">
+                <h4>Ziel dieser Lektion</h4>
+                <p id="lessonGoal">Du lernst, wie eine HTML-Seite aufgebaut ist und warum index.html der wichtigste Dateiname für GitHub Pages ist.</p>
+              </div>
+              <pre id="lessonCode">&lt;!DOCTYPE html&gt;
+&lt;html lang="de"&gt;
+&lt;head&gt;
+  &lt;title&gt;Meine Website&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;h1&gt;Hallo Welt&lt;/h1&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+              <div class="challenge-grid">
+                <div class="info-box">
+                  <h4>Merke dir</h4>
+                  <ul id="lessonBullets">
+                    <li>HTML beschreibt Inhalte.</li>
+                    <li>CSS gestaltet Inhalte.</li>
+                    <li>JavaScript macht Inhalte interaktiv.</li>
+                  </ul>
+                </div>
+                <div class="info-box">
+                  <h4>Aufgabe</h4>
+                  <p id="lessonTask">Erstelle im Editor eine Überschrift, einen Text und einen Button.</p>
+                  <br />
+                  <a href="#editor" class="btn">Im Editor üben</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="editor">
+      <div class="container">
+        <div class="section-head">
+          <h2>Live Editor mit Vorschau.</h2>
+          <p>
+            Hier schreibt der Nutzer Code und sieht direkt das Ergebnis. Für eine Lernseite ist das Gold:
+            sofortiges Feedback, kein Ratespiel, keine trockene Theorie.
+          </p>
+        </div>
+
+        <div class="editor-shell">
+          <div class="editor-toolbar">
+            <div class="toolbar-group">
+              <button class="btn ghost" id="templateHtml">HTML Vorlage</button>
+              <button class="btn ghost" id="templateCard">Card Vorlage</button>
+              <button class="btn ghost" id="templateButton">Button Vorlage</button>
+            </div>
+            <div class="toolbar-group">
+              <button class="btn" id="runCode">Ausführen</button>
+              <button class="btn ghost" id="clearCode">Leeren</button>
+            </div>
+          </div>
+
+          <div class="editor-grid">
+            <div>
+              <div class="panel-title">Code</div>
+              <textarea id="codeInput"><h1>Hallo LionCoder</h1>
+<p>Ich lerne HTML, CSS und JavaScript.</p>
+<button onclick="alert('Stark geklickt!')">Klick mich</button></textarea>
+            </div>
+            <div>
+              <div class="panel-title">Vorschau</div>
+              <iframe id="preview" title="Code Vorschau"></iframe>
+            </div>
+          </div>
+        </div>
+
+        <div class="tasks">
+          <div class="task"><h4>Aufgabe 1</h4><p>Erstelle eine Überschrift mit deinem Namen oder Website-Namen.</p></div>
+          <div class="task"><h4>Aufgabe 2</h4><p>Füge einen Button hinzu, der beim Klick eine Meldung zeigt.</p></div>
+          <div class="task"><h4>Aufgabe 3</h4><p>Baue eine kleine Karte mit Titel, Text und Link.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="mission">
+      <div class="container">
+        <div class="section-head">
+          <h2>Mission-Modus.</h2>
+          <p>
+            Kleine Aufgaben machen Lernen leichter. Das hier ist bewusst simpel gehalten,
+            aber fühlt sich schon nach Level-System an.
+          </p>
+        </div>
+
+        <div class="game-area">
+          <div class="mission-card">
+            <h3>Mission: Baue deine erste Mini-Seite</h3>
+            <p>Erfülle alle drei Punkte und sammle XP. Die Website speichert deinen Stand lokal im Browser.</p>
+            <div class="checklist">
+              <label class="check-item"><input type="checkbox" class="missionCheck" /> Überschrift erstellt</label>
+              <label class="check-item"><input type="checkbox" class="missionCheck" /> Beschreibung geschrieben</label>
+              <label class="check-item"><input type="checkbox" class="missionCheck" /> Button eingebaut</label>
+            </div>
+            <br />
+            <button class="btn" id="finishMission">Mission abschließen</button>
+          </div>
+
+          <div class="mission-card">
+            <h3>Dein Fortschritt</h3>
+            <p>XP, Level und Abzeichen geben dem Nutzer Motivation. Kein Schnickschnack — einfach ein gutes Lerngefühl.</p>
+            <div class="xp-line"><span>Level <span id="levelText">1</span></span><span><span id="xpText">0</span> / 500 XP</span></div>
+            <div class="progressbar"><span id="xpBar" style="--w: 0%"></span></div>
+            <br />
+            <button class="btn ghost" id="resetProgress">Fortschritt zurücksetzen</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="quiz">
+      <div class="container">
+        <div class="section-head">
+          <h2>Quiz-System.</h2>
+          <p>
+            Ein Quiz bringt Leben rein. Richtig beantwortete Fragen geben XP und zeigen,
+            ob der Nutzer wirklich verstanden hat, was HTML, CSS und JavaScript machen.
+          </p>
+        </div>
+
+        <div class="quiz-card">
+          <p id="quizCounter">Frage 1 von 5</p>
+          <h3 id="quizQuestion">Welche Sprache baut das Grundgerüst einer Website?</h3>
+          <div class="quiz-options" id="quizOptions"></div>
+          <div class="result-box" id="quizResult"></div>
+          <button class="btn ghost hidden" id="nextQuestion">Nächste Frage</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="profil">
+      <div class="container">
+        <div class="section-head">
+          <h2>Profil & Abzeichen.</h2>
+          <p>
+            So wirkt deine Seite sofort größer: Nutzerprofil, XP-Leiste, Badges und Lernstatus.
+            Alles lokal gespeichert, ohne Backend.
+          </p>
+        </div>
+
+        <div class="profile-grid">
+          <div class="profile-card">
+            <div class="avatar">🦁</div>
+            <h3>LionCoder</h3>
+            <p>Dein Status auf LionCodingWeb. Je mehr du klickst, lernst und löst, desto mehr XP sammelst du.</p>
+            <div class="xp-line"><span>XP</span><span id="profileXP">0</span></div>
+            <div class="progressbar"><span id="profileBar" style="--w: 0%"></span></div>
+          </div>
+
+          <div class="achievement-card">
+            <h3>Abzeichen</h3>
+            <br />
+            <div class="badges">
+              <div class="badge-card"><strong>HTML Rookie</strong><small>Starte die erste Lektion.</small></div>
+              <div class="badge-card"><strong>Click Master</strong><small>Bestehe eine Quizfrage.</small></div>
+              <div class="badge-card"><strong>Mission Lion</strong><small>Schließe eine Mission ab.</small></div>
+              <div class="badge-card"><strong>Dark Designer</strong><small>Teste eine CSS-Vorlage.</small></div>
+              <div class="badge-card"><strong>Code Runner</strong><small>Führe Code im Editor aus.</small></div>
+              <div class="badge-card"><strong>Deploy Ready</strong><small>Bereit für GitHub Pages.</small></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="roadmap">
+      <div class="container">
+        <div class="section-head">
+          <h2>Roadmap zum Veröffentlichen.</h2>
+          <p>
+            Erst lokal sauber bauen, dann testen, dann GitHub. Das ist der normale, stabile Weg.
+            Keine Raketenwissenschaft, aber genau deshalb funktioniert es.
+          </p>
+        </div>
+
+        <div class="roadmap">
+          <div class="road-step"><strong>01</strong><h3>VS Code</h3><p>Ordner erstellen: LionCodingWeb. Datei index.html anlegen und Code einfügen.</p></div>
+          <div class="road-step"><strong>02</strong><h3>Lokal testen</h3><p>Datei im Browser öffnen. Menü, Editor, Quiz und Mission prüfen.</p></div>
+          <div class="road-step"><strong>03</strong><h3>GitHub Repo</h3><p>Neues Repository erstellen. Am besten lioncodingweb nennen.</p></div>
+          <div class="road-step"><strong>04</strong><h3>Datei hochladen</h3><p>index.html in GitHub hochladen. Wichtig: exakt index.html schreiben.</p></div>
+          <div class="road-step"><strong>05</strong><h3>GitHub Pages</h3><p>Settings → Pages → Deploy from branch → main → Save. Dann ist die Seite online.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="faq">
+      <div class="container">
+        <div class="section-head">
+          <h2>Häufige Fragen.</h2>
+          <p>Kleine Klarheit, großer Effekt. Gerade für Anfänger muss eine Lernplattform erklären, was Sache ist.</p>
+        </div>
+
+        <div class="faq">
+          <details open>
+            <summary>Warum nicht wirklich 10.000 Zeilen?</summary>
+            <p>Weil viele Zeilen nicht automatisch besser sind. Sauberer Code ist wie gutes Werkzeug: übersichtlich, stabil und erweiterbar. Diese Datei ist groß genug für eine starke Demo und klein genug, damit du sie noch verstehst.</p>
+          </details>
+          <details>
+            <summary>Kann ich daraus später mehrere Dateien machen?</summary>
+            <p>Ja. Später trennst du HTML, CSS und JavaScript in index.html, style.css und script.js. Für den Start ist eine Datei einfacher.</p>
+          </details>
+          <details>
+            <summary>Kann man daraus eine echte Plattform machen?</summary>
+            <p>Ja. Dafür brauchst du später Login, Datenbank, Kurse im Backend und vielleicht React oder Next.js. Aber diese Version ist ein stabiler Anfang.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      © 2026 LionCodingWeb — Lernen. Coden. Veröffentlichen.
+    </div>
+  </footer>
+
+  <div class="toast" id="toast">Gespeichert.</div>
+
+  <script>
+    const nav = document.getElementById("nav");
+    const menuBtn = document.getElementById("menuBtn");
+    const saveBtn = document.getElementById("saveBtn");
+    const toast = document.getElementById("toast");
+
+    const lessonTabs = document.querySelectorAll(".lesson-tab");
+    const lessonSmall = document.getElementById("lessonSmall");
+    const lessonTitle = document.getElementById("lessonTitle");
+    const lessonIntro = document.getElementById("lessonIntro");
+    const lessonGoal = document.getElementById("lessonGoal");
+    const lessonCode = document.getElementById("lessonCode");
+    const lessonBullets = document.getElementById("lessonBullets");
+    const lessonTask = document.getElementById("lessonTask");
+
+    const codeInput = document.getElementById("codeInput");
+    const preview = document.getElementById("preview");
+    const runCode = document.getElementById("runCode");
+    const clearCode = document.getElementById("clearCode");
+    const templateHtml = document.getElementById("templateHtml");
+    const templateCard = document.getElementById("templateCard");
+    const templateButton = document.getElementById("templateButton");
+
+    const missionChecks = document.querySelectorAll(".missionCheck");
+    const finishMission = document.getElementById("finishMission");
+    const resetProgress = document.getElementById("resetProgress");
+
+    const xpText = document.getElementById("xpText");
+    const xpBar = document.getElementById("xpBar");
+    const levelText = document.getElementById("levelText");
+    const statXP = document.getElementById("statXP");
+    const profileXP = document.getElementById("profileXP");
+    const profileBar = document.getElementById("profileBar");
+
+    const quizCounter = document.getElementById("quizCounter");
+    const quizQuestion = document.getElementById("quizQuestion");
+    const quizOptions = document.getElementById("quizOptions");
+    const quizResult = document.getElementById("quizResult");
+    const nextQuestion = document.getElementById("nextQuestion");
+
+    let state = {
+      xp: Number(localStorage.getItem("lioncoding_xp")) || 0,
+      quizIndex: 0,
+      answered: false
+    };
+
+    const lessons = {
+      html: {
+        small: "LEKTION 01",
+        title: "HTML Basics verstehen",
+        intro: "HTML ist das Grundgerüst jeder Website. Erst kommt Struktur, dann Design, dann Logik.",
+        goal: "Du lernst, wie eine HTML-Seite aufgebaut ist und warum index.html der wichtigste Dateiname für GitHub Pages ist.",
+        code: `<!DOCTYPE html>
+<html lang="de">
+<head>
+  <title>Meine Website</title>
+</head>
+<body>
+  <h1>Hallo Welt</h1>
+  <p>Ich lerne Coding.</p>
+</body>
+</html>`,
+        bullets: ["HTML beschreibt Inhalte.", "Tags sind Bausteine.", "index.html ist die Startdatei deiner Website."],
+        task: "Erstelle im Editor eine Überschrift, einen Text und einen Button."
+      },
+      css: {
+        small: "LEKTION 02",
+        title: "CSS Design bauen",
+        intro: "CSS macht aus einer rohen Website ein echtes Interface. Schwarz-Weiß kann brutal stark wirken, wenn Abstände und Kontrast stimmen.",
+        goal: "Du lernst Farben, Abstände, Rahmen, Hover-Effekte und Layouts bewusst einzusetzen.",
+        code: `body {
+  background: #050505;
+  color: white;
+  font-family: Consolas, monospace;
+}
+
+.card {
+  border: 1px solid #333;
+  padding: 24px;
+  border-radius: 18px;
+}`,
+        bullets: ["CSS gestaltet HTML.", "Gute Abstände machen Design hochwertig.", "Hover-Effekte geben Feedback."],
+        task: "Baue eine Card mit Rahmen, Abstand und dunklem Hintergrund."
+      },
+      js: {
+        small: "LEKTION 03",
+        title: "JavaScript Interaktion",
+        intro: "JavaScript reagiert auf Klicks, verändert Inhalte und macht aus einer Seite eine kleine App.",
+        goal: "Du lernst, wie Buttons per Klick Aktionen starten und Inhalte verändert werden.",
+        code: `const button = document.querySelector("button");
+
+button.addEventListener("click", () => {
+  alert("Du hast geklickt!");
+});`,
+        bullets: ["JavaScript macht Webseiten interaktiv.", "Events reagieren auf Klicks.", "Der DOM ist die Struktur der Seite im Browser."],
+        task: "Erstelle einen Button, der beim Klick eine alert-Meldung zeigt."
+      },
+      deploy: {
+        small: "LEKTION 04",
+        title: "Website veröffentlichen",
+        intro: "Eine Website ist erst richtig stark, wenn sie online ist. GitHub Pages ist perfekt für den Start.",
+        goal: "Du lernst den Weg von VS Code über GitHub bis zur öffentlichen Website.",
+        code: `1. Ordner erstellen: LionCodingWeb
+2. Datei erstellen: index.html
+3. Code einfügen und testen
+4. GitHub Repository erstellen
+5. GitHub Pages aktivieren`,
+        bullets: ["Erst lokal testen.", "Dann auf GitHub hochladen.", "GitHub Pages veröffentlicht deine Seite."],
+        task: "Speichere die Datei als index.html und teste sie im Browser."
+      }
+    };
+
+    const quiz = [
+      {
+        question: "Welche Sprache baut das Grundgerüst einer Website?",
+        options: ["CSS", "HTML", "JavaScript", "GitHub"],
+        answer: "HTML",
+        explain: "Richtig: HTML ist für die Struktur zuständig."
+      },
+      {
+        question: "Welche Sprache ist für Farben, Layout und Design zuständig?",
+        options: ["CSS", "HTML", "Markdown", "SQL"],
+        answer: "CSS",
+        explain: "Genau: CSS gestaltet deine Website."
+      },
+      {
+        question: "Was macht JavaScript auf einer Website?",
+        options: ["Nur Bilder speichern", "Interaktion und Logik", "Nur Überschriften", "Domain kaufen"],
+        answer: "Interaktion und Logik",
+        explain: "Stark: JavaScript macht Klicks, Logik und dynamische Inhalte möglich."
+      },
+      {
+        question: "Wie muss die Startdatei für GitHub Pages meistens heißen?",
+        options: ["start.txt", "website.css", "index.html", "main.docx"],
+        answer: "index.html",
+        explain: "Richtig: index.html ist die klassische Startdatei."
+      },
+      {
+        question: "Was ist besser für Anfänger: erst lokal testen oder direkt blind veröffentlichen?",
+        options: ["Blind veröffentlichen", "Erst lokal testen", "Gar nicht testen", "Nur hoffen"],
+        answer: "Erst lokal testen",
+        explain: "Genau. Erst prüfen, dann veröffentlichen. Alte Schule, bester Weg."
+      }
+    ];
+
+    function showToast(message) {
+      toast.textContent = message;
+      toast.classList.add("show");
+      setTimeout(() => toast.classList.remove("show"), 2600);
+    }
+
+    function addXP(amount, reason) {
+      state.xp += amount;
+      localStorage.setItem("lioncoding_xp", String(state.xp));
+      updateXP();
+      showToast(`+${amount} XP — ${reason}`);
+    }
+
+    function updateXP() {
+      const level = Math.floor(state.xp / 500) + 1;
+      const current = state.xp % 500;
+      const percent = Math.min((current / 500) * 100, 100);
+      xpText.textContent = current;
+      profileXP.textContent = state.xp + " XP";
+      statXP.textContent = state.xp + " XP";
+      levelText.textContent = level;
+      xpBar.style.setProperty("--w", percent + "%");
+      profileBar.style.setProperty("--w", percent + "%");
+    }
+
+    function setLesson(key) {
+      const item = lessons[key];
+      lessonSmall.textContent = item.small;
+      lessonTitle.textContent = item.title;
+      lessonIntro.textContent = item.intro;
+      lessonGoal.textContent = item.goal;
+      lessonCode.textContent = item.code;
+      lessonTask.textContent = item.task;
+      lessonBullets.innerHTML = item.bullets.map(bullet => `<li>${bullet}</li>`).join("");
+      addXP(15, "Lektion geöffnet");
+    }
+
+    function updatePreview() {
+      const code = codeInput.value;
+      preview.srcdoc = `<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 28px;
+      color: #111;
+      line-height: 1.6;
+    }
+    button {
+      padding: 12px 18px;
+      background: #111;
+      color: white;
+      border: 0;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+    .card {
+      border: 1px solid #111;
+      border-radius: 16px;
+      padding: 22px;
+      max-width: 420px;
+    }
+  </style>
+</head>
+<body>${code}</body>
+</html>`;
+    }
+
+    function loadQuiz() {
+      const item = quiz[state.quizIndex];
+      state.answered = false;
+      quizCounter.textContent = `Frage ${state.quizIndex + 1} von ${quiz.length}`;
+      quizQuestion.textContent = item.question;
+      quizResult.textContent = "";
+      nextQuestion.classList.add("hidden");
+      quizOptions.innerHTML = item.options.map(option => `<button>${option}</button>`).join("");
+
+      quizOptions.querySelectorAll("button").forEach(button => {
+        button.addEventListener("click", () => {
+          if (state.answered) return;
+          state.answered = true;
+
+          if (button.textContent === item.answer) {
+            quizResult.textContent = item.explain;
+            button.style.borderColor = "#ffffff";
+            addXP(50, "Quizfrage richtig");
+          } else {
+            quizResult.textContent = `Noch nicht. Richtige Antwort: ${item.answer}.`;
+            button.style.borderColor = "#777777";
+          }
+
+          nextQuestion.classList.remove("hidden");
+        });
+      });
+    }
+
+    menuBtn.addEventListener("click", () => nav.classList.toggle("active"));
+
+    document.querySelectorAll("nav a").forEach(link => {
+      link.addEventListener("click", () => nav.classList.remove("active"));
+    });
+
+    saveBtn.addEventListener("click", () => {
+      localStorage.setItem("lioncoding_xp", String(state.xp));
+      showToast("Fortschritt gespeichert. Stabil wie Beton.");
+    });
+
+    lessonTabs.forEach(tab => {
+      tab.addEventListener("click", () => {
+        lessonTabs.forEach(t => t.classList.remove("active"));
+        tab.classList.add("active");
+        setLesson(tab.dataset.lesson);
+      });
+    });
+
+    runCode.addEventListener("click", () => {
+      updatePreview();
+      addXP(25, "Code ausgeführt");
+    });
+
+    clearCode.addEventListener("click", () => {
+      codeInput.value = "";
+      updatePreview();
+      showToast("Editor geleert.");
+    });
+
+    templateHtml.addEventListener("click", () => {
+      codeInput.value = `<h1>Meine erste Website</h1>\n<p>Das ist mein erster HTML-Code.</p>`;
+      updatePreview();
+      addXP(10, "HTML Vorlage geladen");
+    });
+
+    templateCard.addEventListener("click", () => {
+      codeInput.value = `<div class="card">\n  <h2>LionCodingWeb</h2>\n  <p>Ich baue eine saubere Coding-Lernseite.</p>\n  <button onclick="alert('Card läuft!')">Start</button>\n</div>`;
+      updatePreview();
+      addXP(10, "Card Vorlage geladen");
+    });
+
+    templateButton.addEventListener("click", () => {
+      codeInput.value = `<button onclick="alert('Du hast den Button geklickt!')">Klick mich</button>`;
+      updatePreview();
+      addXP(10, "Button Vorlage geladen");
+    });
+
+    missionChecks.forEach(check => {
+      check.addEventListener("change", () => {
+        check.closest(".check-item").classList.toggle("done", check.checked);
+      });
+    });
+
+    finishMission.addEventListener("click", () => {
+      const allDone = Array.from(missionChecks).every(check => check.checked);
+      if (allDone) {
+        addXP(120, "Mission abgeschlossen");
+      } else {
+        showToast("Noch nicht fertig: Hake alle Mission-Punkte ab.");
+      }
+    });
+
+    resetProgress.addEventListener("click", () => {
+      state.xp = 0;
+      localStorage.setItem("lioncoding_xp", "0");
+      updateXP();
+      showToast("Fortschritt zurückgesetzt.");
+    });
+
+    nextQuestion.addEventListener("click", () => {
+      state.quizIndex = (state.quizIndex + 1) % quiz.length;
+      loadQuiz();
+    });
+
+    updatePreview();
+    updateXP();
+    loadQuiz();
+  </script>
+</body>
+</html>
